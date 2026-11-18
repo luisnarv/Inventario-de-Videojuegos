@@ -1,0 +1,122 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="clr-namespace:InventarioVideojuegos.Models"
+        x:Class="InventarioVideojuegos.MainWindow"
+        Title="Gestion de Inventario de Videojuegos - C# y .NET"
+        Width="1050" Height="700"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Background="#1E1E2E" Padding="20,15" BorderBrush="#313244" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="*, Auto">
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="INVENTARIO PERSONAL DE VIDEOJUEGOS" FontSize="20" FontWeight="Bold" Foreground="#CDD6F4" />
+                    <TextBlock Text="Electiva de Profundizacion I - Arquitectura POO con Avalonia UI y ADO.NET SQLite" FontSize="12" Foreground="#A6ADC8" Margin="0,4,0,0" />
+                </StackPanel>
+                <Border Grid.Column="1" Background="#313244" CornerRadius="6" Padding="12,6" VerticalAlignment="Center">
+                    <TextBlock Name="txtTotalJuegos" Text="Total: 0 juegos" FontSize="13" FontWeight="SemiBold" Foreground="#89B4FA" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="380, *" Margin="20">
+            <Border Grid.Column="0" Background="#181825" CornerRadius="10" Padding="18" Margin="0,0,15,0" BorderBrush="#313244" BorderThickness="1">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="DATOS DEL VIDEOJUEGO" FontWeight="Bold" FontSize="15" Foreground="#CBA6F7" Margin="0,0,0,5" />
+
+                        <StackPanel Spacing="3">
+                            <TextBlock Text="Titulo *" FontSize="12" Foreground="#BAC2DE" />
+                            <TextBox Name="txtTitulo" Watermark="Nombre del juego..." />
+                        </StackPanel>
+
+                        <StackPanel Spacing="3">
+                            <TextBlock Text="Plataforma *" FontSize="12" Foreground="#BAC2DE" />
+                            <ComboBox Name="cmbPlataforma" HorizontalAlignment="Stretch">
+                                <ComboBoxItem Content="PC" />
+                                <ComboBoxItem Content="PlayStation 5" />
+                                <ComboBoxItem Content="Xbox Series X" />
+                                <ComboBoxItem Content="Nintendo Switch" />
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Spacing="3">
+                            <TextBlock Text="Genero *" FontSize="12" Foreground="#BAC2DE" />
+                            <TextBox Name="txtGenero" Watermark="Ej. Accion, RPG, Aventura..." />
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*, *" Margin="0,2">
+                            <StackPanel Grid.Column="0" Margin="0,0,5,0" Spacing="3">
+                                <TextBlock Text="Precio (USD) *" FontSize="12" Foreground="#BAC2DE" />
+                                <TextBox Name="txtPrecio" Watermark="0.00" Text="0.00" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0" Spacing="3">
+                                <TextBlock Text="Horas Jugadas *" FontSize="12" Foreground="#BAC2DE" />
+                                <TextBox Name="txtHoras" Watermark="0" Text="0" />
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Spacing="3">
+                            <TextBlock Text="Estado de Juego *" FontSize="12" Foreground="#BAC2DE" />
+                            <ComboBox Name="cmbEstado" HorizontalAlignment="Stretch">
+                                <ComboBoxItem Content="Pendiente" />
+                                <ComboBoxItem Content="Jugando" />
+                                <ComboBoxItem Content="Completado" />
+                            </ComboBox>
+                        </StackPanel>
+
+                        <Border Name="bannerMensaje" Background="#313244" CornerRadius="6" Padding="10,8" Margin="0,6" IsVisible="False">
+                            <TextBlock Name="txtMensaje" TextWrapping="Wrap" FontSize="12" />
+                        </Border>
+
+                        <Grid ColumnDefinitions="*, *" Margin="0,10,0,0">
+                            <Button Name="btnGuardar" Content="Guardar Nuevo" Grid.Column="0" Margin="0,0,4,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#A6E3A1" Foreground="#11111B" FontWeight="Bold" Click="OnGuardarClick" />
+                            <Button Name="btnActualizar" Content="Actualizar" Grid.Column="1" Margin="4,0,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#89B4FA" Foreground="#11111B" FontWeight="Bold" Click="OnActualizarClick" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, *" Margin="0,6,0,0">
+                            <Button Name="btnEliminar" Content="Eliminar" Grid.Column="0" Margin="0,0,4,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#F38BA8" Foreground="#11111B" FontWeight="Bold" Click="OnEliminarClick" />
+                            <Button Name="btnLimpiar" Content="Limpiar" Grid.Column="1" Margin="4,0,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#585B70" Foreground="#CDD6F4" Click="OnLimpiarClick" />
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Border Grid.Column="1" Background="#181825" CornerRadius="10" Padding="18" BorderBrush="#313244" BorderThickness="1">
+                <Grid RowDefinitions="Auto, *">
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,12">
+                        <TextBox Name="txtBuscar" Grid.Column="0" Watermark="Buscar videojuego por titulo o plataforma..." Margin="0,0,10,0" TextChanged="OnBuscarTextChanged" />
+                        <Button Name="btnRefrescar" Grid.Column="1" Content="Recargar" Background="#45475A" Foreground="#CDD6F4" Click="OnRefrescarClick" />
+                    </Grid>
+
+                    <ListBox Name="lstVideojuegos" Grid.Row="1" Background="Transparent" SelectionChanged="OnSeleccionJuegoChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:Videojuego">
+                                <Border Background="#1E1E2E" CornerRadius="8" Padding="14,10" Margin="0,4" BorderBrush="#313244" BorderThickness="1">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <StackPanel Grid.Column="0" Spacing="4">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Id, StringFormat='#{0}'}" FontWeight="Bold" Foreground="#F9E2AF" FontSize="13" />
+                                                <TextBlock Text="{Binding Titulo}" FontWeight="Bold" FontSize="15" Foreground="#CDD6F4" />
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                                <TextBlock Text="{Binding Plataforma, StringFormat='Plataforma: {0}'}" FontSize="12" Foreground="#89B4FA" />
+                                                <TextBlock Text="{Binding Genero, StringFormat='Genero: {0}'}" FontSize="12" Foreground="#A6ADC8" />
+                                                <TextBlock Text="{Binding Precio, StringFormat='Precio: ${0:F2}'}" FontSize="12" Foreground="#A6E3A1" />
+                                                <TextBlock Text="{Binding HorasJugadas, StringFormat='Horas: {0}h'}" FontSize="12" Foreground="#F5C2E7" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Border Grid.Column="1" Background="#313244" CornerRadius="5" Padding="8,4" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Estado}" FontSize="11" FontWeight="Bold" Foreground="#FAB387" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
