@@ -4,7 +4,6 @@
 
 * Proyecto: Inventario Personal de Videojuegos
 * Estudiante: Luis Narvaez
-* Asignatura: Programacion con C# y .NET (Electiva de Profundizacion I)
 * Semestre: Cuarto Semestre
 * Evaluacion: Parcial Final - Desarrollo de Software con .NET
 
